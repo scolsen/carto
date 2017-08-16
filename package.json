@@ -1,0 +1,32 @@
+{
+  "name": "carto",
+  "version": "1.0.0",
+  "description": "A small library of maps.",
+  "main": "carto.js",
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "^3.5.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scolsen/carto.git"
+  },
+  "keywords": [
+    "maps",
+    "javascript",
+    "node",
+    "arrays",
+    "lists",
+    "collections",
+    "functional"
+  ],
+  "author": "Scott Olsen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/scolsen/carto/issues"
+  },
+  "homepage": "https://github.com/scolsen/carto#readme"
+}
