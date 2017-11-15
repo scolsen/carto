@@ -1,95 +1,62 @@
-/**
- * Created by scolsen on 8/8/2017.
- */
-
-function unit(){
-    return ()=>{return null}
+const unit = function unit() {
+    return () => {return null}
 }
 
-function is_function(f){
+const _isFunction = function _isFunction(f) {
     return typeof f === 'function';
 }
 
-function is_array(a){
+const _isArray = function _isArray(a) {
     return Array.isArray(a);
 }
 
-function sink(array){
+const sink = function sink(array) {
     array.reverse();
     array.pop();
     array.reverse();
 }
 
-/**
- * deep_map. Apply designated function to all members
- * Of an array of arrays of any size.
- * Supplied function should have signature:
- * func(x, index, array)
- */
-function deep_map(array, func){
-    if(!is_array(array)) return unit();
-    return array.map((x, index, array)=>{
-        if(is_array(x)) return deep_map(x, func);
-        return func.call(this, x, index, array);
-    });
+// Map function to all members of an array of arrays of any size.
+const deepMap = function deepMap(array, func) {
+    return array.map((x, index, array) => {
+            if(_isArray(x)) return deep_map(x, func);
+            return func.call(this, x, index, array);
+        });
 }
 
-/**
- * Deep_map but only runs the specified function if
- * the element matches the provided pattern which is
- * a function that returns a Boolean and is passed as
- * func[1]
- * @param array
- * @param func
- * @param pattern
- * @returns {*|Array|{}}
- */
-function pattern_map(array, func, pattern){
-    if(!is_function(pattern)) return unit();
+// deepMap but only runs the specified function if the element matches the provided pattern.
+// pattern must be a function that returns a boolean.
+const patternMap = function patternMap(array, func, pattern) {
     return array.map((x, index, array)=>{
         if(pattern(x)) return func(x, index, array);
-        if(is_array(x)) return pattern_map(x, func, pattern);
+        if(_isArray(x)) return patternMap(x, func, pattern);
         return unit();
     });
 }
 
-/**
- * Apply functions to every memeber of @array from
- * lef to right. Applications are subsequent.
- * function 2 is applied to the map resulting from
- * the application of function 1.
- * @param array
- * @param functions
- * @returns {*}
- */
-function sequence_map(array, functions){
-    if(!is_array(functions)) return unit();
-    if (functions.length !== 0){
-        let func = functions[0];
-        sink(functions);
-        return sequence_map(deep_map(array, func), functions);
+// Apply functions to every memeber of @array from left to right. Applications are subsequent.
+// Function 2 is applied to the map resulting from the application of function 1.
+const sequenceMap = function sequenceMap(array, functions){
+    if(isArray(functions)){
+        if (functions.length !== 0){
+            let func = functions[0];
+            sink(functions);
+            return sequenceMap(deepMap(array, func), functions);
+        }
     }
     return array;
 }
 
-/**
- * Return an array that contains the resulting maps of
- * Applying each function in @functions to @array
- * separately and not sequentially.
- * @param array
- * @param functions
- * @returns {Array}
- */
-function delimit_map(array, functions){
+// Return an array that contains the resulting maps of applying each function in @functions to @array separately and not sequentially.
+const delimitMap = function delimitMap(array, functions){
     let res = [];
-    if(!is_array(functions)) return unit();
     functions.forEach((x)=>{
-        res.push(deep_map(array, x));
+        res.push(deepMap(array, x));
     });
     return res;
 }
 
-exports.deep_map = deep_map;
-exports.pattern_map = pattern_map;
-exports.sequence_map = sequence_map;
-exports.delimit_map = delimit_map;
+exports.deepMap = deepMap;
+exports.patternMap = patternMap;
+exports.sequenceMap = sequenceMap;
+exports.delimitMap = delimitMap;
